@@ -28,13 +28,13 @@ public class ClientInput extends Thread{
     private MulticastSocket socket;
     private String previousMessage;
     private JButton btns[];
-    private String username;
-    public ClientInput(String _broadcastIP, int _broadcastPort, JButton [] _btns, String _username){
+    private ClientSettings settings;
+    public ClientInput(String _broadcastIP, int _broadcastPort, JButton [] _btns, ClientSettings _settings){
         broadcastIP = _broadcastIP;
         broadcastPort = _broadcastPort;
         previousMessage = "";
         btns = _btns;
-        username = _username;
+        settings = _settings;
     }
     private void changeBtnImage(final int btnNumber){
         ImageIcon ii = new ImageIcon(getClass().getClassLoader().getResource("resources/images/monster.png"));
@@ -64,10 +64,12 @@ public class ClientInput extends Thread{
         if(arr[0].equals("r")){
             int round = Integer.parseInt(arr[1]);
             int number = Integer.parseInt(arr[2]);
+            settings.setLastRound(round);
+            settings.setLastMonsterNumber(number);
             changeBtnImage(number);
         }else{
             String bla = "";
-            if(arr[1].equals(username)) bla = "Ganaste";
+            if(arr[1].equals(settings.getUsername())) bla = "Ganaste";
             else bla = "El ganador es: "+arr[1];
             JOptionPane.showMessageDialog(null, bla);
         }

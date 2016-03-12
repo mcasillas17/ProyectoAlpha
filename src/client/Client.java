@@ -7,6 +7,10 @@ package client;
 
 import interfaces.GameConnectionRequest;
 import java.awt.Insets;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -17,6 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import serializables.Monster;
 
 /**
  *
@@ -32,6 +37,10 @@ public class Client extends javax.swing.JFrame {
     private int tcpPort, broadcastPort;
     private JButton btns [];
     private String username;
+    private Socket clientSocket;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
+    private ClientSettings settings;
     public Client() {
         initComponents();
         initInterface();
@@ -43,7 +52,8 @@ public class Client extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "No se pudo conectar al RMI");
         }
         jLabel1.setText(jLabel1.getText()+" "+username);
-        input = new ClientInput(broadcastIP, broadcastPort,btns,username);
+        settings = new ClientSettings(username);
+        input = new ClientInput(broadcastIP, broadcastPort,btns,settings);
         input.start();
     }
     private void initInterface(){
@@ -99,6 +109,19 @@ public class Client extends javax.swing.JFrame {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+    public void sendMonster(int monsterNumber){
+        try {
+            clientSocket = new Socket(tcpIP,tcpPort);
+            in = new ObjectInputStream(clientSocket.getInputStream());
+            out = new ObjectOutputStream(clientSocket.getOutputStream());
+            int registeredRound = settings.getLastRound();
+            Monster mons = new Monster(registeredRound, monsterNumber, username);
+            out.writeObject(mons);
+            clientSocket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -250,46 +273,55 @@ public class Client extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         System.out.println("Presioné el botón 1");
+        sendMonster(0);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         System.out.println("Presioné el botón 2");
+        sendMonster(1);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         System.out.println("Presioné el botón 3");
+        sendMonster(2);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         System.out.println("Presioné el botón 4");
+        sendMonster(3);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         System.out.println("Presioné el botón 5");
+        sendMonster(4);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         System.out.println("Presioné el botón 6");
+        sendMonster(5);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         System.out.println("Presioné el botón 7");
+        sendMonster(6);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
         System.out.println("Presioné el botón 8");
+        sendMonster(7);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
         System.out.println("Presioné el botón 9");
+        sendMonster(8);
     }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
