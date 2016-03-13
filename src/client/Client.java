@@ -53,7 +53,7 @@ public class Client extends javax.swing.JFrame {
         }
         jLabel1.setText(jLabel1.getText()+" "+username);
         settings = new ClientSettings(username);
-        input = new ClientInput(broadcastIP, broadcastPort,btns,settings);
+        input = new ClientInput(broadcastIP, broadcastPort,btns,settings,lblScore);
         input.start();
     }
     private void initInterface(){
@@ -116,10 +116,19 @@ public class Client extends javax.swing.JFrame {
             in = new ObjectInputStream(clientSocket.getInputStream());
             out = new ObjectOutputStream(clientSocket.getOutputStream());
             int registeredRound = settings.getLastRound();
+            System.out.println("Enviando monstruo de la ronda: "+registeredRound);
             Monster mons = new Monster(registeredRound, monsterNumber, username);
+            System.out.println(mons.toString());
             out.writeObject(mons);
+            Monster res = (Monster) in.readObject();
+            if(res.getUser().equals("correct")) {
+                settings.increaseScore();
+                lblScore.setText("Score: "+settings.getScore());
+            }
             clientSocket.close();
         } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -142,7 +151,7 @@ public class Client extends javax.swing.JFrame {
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblScore = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -211,7 +220,9 @@ public class Client extends javax.swing.JFrame {
 
         jLabel1.setText("Username:");
 
-        jLabel2.setText("Score: ");
+        lblScore.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        lblScore.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblScore.setText("Score: 0");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -238,9 +249,12 @@ public class Client extends javax.swing.JFrame {
                         .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblScore, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(62, 62, 62))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,9 +276,9 @@ public class Client extends javax.swing.JFrame {
                     .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblScore, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                .addGap(12, 12, 12))
         );
 
         pack();
@@ -372,6 +386,6 @@ public class Client extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel lblScore;
     // End of variables declaration//GEN-END:variables
 }

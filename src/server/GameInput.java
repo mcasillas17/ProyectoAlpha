@@ -32,19 +32,25 @@ public class GameInput extends Thread{
     public void run(){
         while(true){
             try {
-                System.out.println("Estoy recibiendo solicitudes TCP");
+                //System.out.println("Estoy recibiendo solicitudes TCP");
                 try (Socket clientSocket = listenSocket.accept()) {
-                    System.out.println("Conexion aceptada");
+                    //System.out.println("Conexion aceptada");
                     ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
                     ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
                     Monster m = (Monster)in.readObject();
                     System.out.println("Monstruo recibido de: "+m.getUser()+" para la ronda "+m.getRound());
                     int r = GameSettings.getRoundNumber();
                     int n = GameSettings.getMonsterNumber();
+                    System.out.println("Ronda del juego: "+r+" // no. monstruo del juego: "+n);
                     boolean w = GameSettings.hasRoundWinner();
-                    if(m.getRound()==r && m.getNumber()==n && !w){//Is a valid monster
+                    Monster res;
+                    if(m.getRound()==(r-1) && m.getNumber()==n && !w){//Is a valid monster
                         GameSettings.registerPoint(m.getUser());
-                        out.write(1);
+                        res = new Monster(-1, -1, "correct");
+                        out.writeObject(res);
+                    }else {
+                        res = new Monster(-1,-1,"wrong");
+                        out.writeObject(res);
                     }
                 }
             } catch (IOException ex) {

@@ -22,6 +22,9 @@ public class ClientSettings {
     public int getScore(){
         return score;
     }
+    public void resetScore(){
+        score = 0;
+    }
     public void increaseScore(){
         score++;
     }

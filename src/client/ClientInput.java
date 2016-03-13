@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -29,12 +30,15 @@ public class ClientInput extends Thread{
     private String previousMessage;
     private JButton btns[];
     private ClientSettings settings;
-    public ClientInput(String _broadcastIP, int _broadcastPort, JButton [] _btns, ClientSettings _settings){
+    private JLabel lblScore;
+    
+    public ClientInput(String _broadcastIP, int _broadcastPort, JButton [] _btns, ClientSettings _settings, JLabel _lblScore){
         broadcastIP = _broadcastIP;
         broadcastPort = _broadcastPort;
         previousMessage = "";
         btns = _btns;
         settings = _settings;
+        lblScore = _lblScore;
     }
     private void changeBtnImage(final int btnNumber){
         ImageIcon ii = new ImageIcon(getClass().getClassLoader().getResource("resources/images/monster.png"));
@@ -69,8 +73,14 @@ public class ClientInput extends Thread{
             changeBtnImage(number);
         }else{
             String bla = "";
-            if(arr[1].equals(settings.getUsername())) bla = "Ganaste";
-            else bla = "El ganador es: "+arr[1];
+            if(arr[1].equals(settings.getUsername())){
+                bla = "Ganaste";
+            }
+            else{
+                bla = "El ganador es: "+arr[1];
+            }
+            settings.resetScore();
+            lblScore.setText("Score: 0");
             JOptionPane.showMessageDialog(null, bla);
         }
     }
@@ -88,7 +98,7 @@ public class ClientInput extends Thread{
                 socket.receive(messageIn);
                 String m = new String(messageIn.getData()).trim();
                 if(!m.equals(previousMessage)){
-                    System.out.println(m+ " from: "+ messageIn.getAddress());
+                    //System.out.println(m+ " from: "+ messageIn.getAddress());
                     previousMessage = m;
                     doMagicThing(m);
                 }

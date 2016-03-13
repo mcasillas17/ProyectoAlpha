@@ -57,13 +57,14 @@ public class GameOutput extends Thread {
                     message = "w-"+win;
                     GameSettings.resetGameSettings();
                 }
-                System.out.println("Enviando \""+message+"\" a "+broadcastAddress);
+                //System.out.println("Enviando \""+message+"\" a "+broadcastAddress);
                 //Create datagram packet
                 byte [] m = message.getBytes();
                 DatagramPacket datagram = new DatagramPacket(m, m.length, gameGroup, gamePort);
                 mulSocket.send(datagram); //Send datagram
                 try {
                     Thread.sleep(2000);//Sleep for two seconds
+                    System.out.println("Scores: \n"+GameSettings.getScores());
                 } catch (InterruptedException ex) {
                     Logger.getLogger(GameOutput.class.getName()).log(Level.SEVERE, null, ex);
                 }

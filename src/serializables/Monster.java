@@ -45,5 +45,8 @@ public class Monster implements Serializable{
     public void setUser(String user) {
         this.user = user;
     }
-    
+    @Override
+    public String toString(){
+        return "Username: "+user+" Round: "+round+" Number: "+number;
+    }
 }

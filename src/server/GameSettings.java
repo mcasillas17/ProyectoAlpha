@@ -20,6 +20,7 @@ public class GameSettings {
         round = 1;
         scores.clear();
         monsterNumber = 1;
+        winner = false;
     }
     public static int getRoundNumber(){
         return round;
@@ -29,15 +30,15 @@ public class GameSettings {
         winner = false;
     }
     public static String winner(){
-        for (Object o : scores.keySet()) 
+        for (String o : scores.keySet()) 
             if (scores.get(o).equals(maxScore)) 
-              return o.toString();
+              return o;
         return "";
     }
     public static boolean registerPoint(String _user){
         boolean res = false;
         int num = scores.containsKey(_user)? scores.get(_user):0;
-        scores.put(_user, num);
+        scores.put(_user, num+1);
         winner = true;
         return res;
     }
@@ -49,5 +50,13 @@ public class GameSettings {
     }
     public static boolean hasRoundWinner(){
         return winner;
+    }
+    public static String getScores(){
+        String res = "";
+        for (String user: scores.keySet()){
+            String value = scores.get(user).toString();  
+            res += "User: "+user+" Score:"+value+"\n";
+        }
+        return res;
     }
 }
