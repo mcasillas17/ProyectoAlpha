@@ -71,16 +71,17 @@ public class Client extends javax.swing.JFrame {
         float scale = 6f; // 2 times smaller
         int width = ii.getIconWidth();
         int newWidth = (int) ((float)width / (float)scale);
-        for(int i=0;i<btns.length;i++){
-            btns[i].setIcon(new ImageIcon(ii.getImage().getScaledInstance(newWidth, -1,
-                java.awt.Image.SCALE_SMOOTH)));
-            btns[i].setHorizontalAlignment(SwingConstants.CENTER);
-            btns[i].setVerticalAlignment(SwingConstants.CENTER);
-            btns[i].setMargin(new Insets(0, 0, 0, 0));
-            btns[i].setBorder(null);
-            btns[i].setText("");
+        for (JButton btn : btns) {
+            btn.setIcon(new ImageIcon(ii.getImage().getScaledInstance(newWidth, -1,
+                    java.awt.Image.SCALE_SMOOTH)));
+            btn.setHorizontalAlignment(SwingConstants.CENTER);
+            btn.setVerticalAlignment(SwingConstants.CENTER);
+            btn.setMargin(new Insets(0, 0, 0, 0));
+            btn.setBorder(null);
+            btn.setText("");
         }
     }
+    //Method that sets the IP's and ports from the RMI's answer
     private void setIPsAndPorts(String data){
         String arr[] = data.split("_");
         broadcastIP = arr[0];
@@ -88,6 +89,8 @@ public class Client extends javax.swing.JFrame {
         tcpIP = arr[2];
         tcpPort = Integer.parseInt(arr[3]);
     }
+    //Method that sets the configuration of the policy
+    //and acceses the rmi from the users data
     private boolean initClientConfig(){
         System.setProperty("java.security.policy","/Users/miguelcasillas/NetBeansProjects/ProyectoAlpha/src/client/client.policy");
         if (System.getSecurityManager() == null) {
@@ -110,6 +113,9 @@ public class Client extends javax.swing.JFrame {
         }
         return false;
     }
+    //Method that creates a tcp connection and sends a Monster object to
+    //the server, and increases the client score if the server
+    //answers with a correct answer
     public void sendMonster(int monsterNumber){
         try {
             clientSocket = new Socket(tcpIP,tcpPort);

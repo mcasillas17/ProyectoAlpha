@@ -36,6 +36,7 @@ public class GameOutput extends Thread {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    //Join the multicast group and send data to every client on the group
     @Override
     public void run(){
         GameSettings.resetGameSettings();

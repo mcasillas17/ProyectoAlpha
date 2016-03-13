@@ -16,6 +16,8 @@ public class Monster implements Serializable{
     private int number;
     private int round;
     private String user;
+    //Set the round, monsterNumber inside the grid, and the user number
+    //for this monster
     public Monster(int _round, int _number, String _user){
         round = _round;
         number = _number;

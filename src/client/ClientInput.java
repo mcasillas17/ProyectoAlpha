@@ -31,7 +31,7 @@ public class ClientInput extends Thread{
     private JButton btns[];
     private ClientSettings settings;
     private JLabel lblScore;
-    
+    //Constructor to init the client configuration
     public ClientInput(String _broadcastIP, int _broadcastPort, JButton [] _btns, ClientSettings _settings, JLabel _lblScore){
         broadcastIP = _broadcastIP;
         broadcastPort = _broadcastPort;
@@ -40,6 +40,7 @@ public class ClientInput extends Thread{
         settings = _settings;
         lblScore = _lblScore;
     }
+    //Method that changes the image of the button for 750 seconds
     private void changeBtnImage(final int btnNumber){
         ImageIcon ii = new ImageIcon(getClass().getClassLoader().getResource("resources/images/monster.png"));
         float scale = 5f; // 2 times smaller
@@ -62,7 +63,9 @@ public class ClientInput extends Thread{
         timer.schedule(action, 750);
         
     }
-    
+    //Method that parses the data read from the multicast socket
+    //sets the last round and the last monster number
+    //Shows a message if the user won
     private void doMagicThing(String m){
         String arr[] = m.split("-");
         if(arr[0].equals("r")){
@@ -84,7 +87,8 @@ public class ClientInput extends Thread{
             JOptionPane.showMessageDialog(null, bla);
         }
     }
-    
+    //Method that joins the multicast group to read the data sent by the server
+    //and parses the messages
     @Override
     public void run(){
         socket = null;

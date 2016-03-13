@@ -21,6 +21,7 @@ import serializables.Monster;
 public class GameInput extends Thread{
     ServerSocket listenSocket;
     int serverPort = 7896;
+    //Create the thread, and it's socket for tcp requests
     public GameInput(){
         try {
             listenSocket = new ServerSocket(serverPort);
@@ -28,6 +29,7 @@ public class GameInput extends Thread{
             Logger.getLogger(GameInput.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    //Accept tcp connections and read the object sent by the Client
     @Override
     public void run(){
         while(true){

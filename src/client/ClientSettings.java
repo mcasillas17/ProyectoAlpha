@@ -14,6 +14,9 @@ public class ClientSettings {
     private final String username;
     private int lastRound;
     private int lastMonsterNumber;
+    //set the settings for a user
+    //this will be an object in the Client class, this means every Client
+    //will have it's settings
     public ClientSettings(String _username){
         score = 0;
         lastRound = 0;
