@@ -20,11 +20,11 @@ import java.util.logging.Logger;
  * @author miguelcasillas
  */
 public class Server {
-    private static int portRMI = 4567;
-    private static String nameRMI = "FirstConnection";
-    private static int broadcastPort = 6789; 
-    private static String broadcastAddress = "228.11.13.17";
-    private static int tcpPort = 7896;
+    private static final int portRMI = 4567;
+    private static final String nameRMI = "FirstConnection";
+    private static final int broadcastPort = 6789; 
+    private static final String broadcastAddress = "228.11.13.17";
+    private static final int tcpPort = 7896;
     private static boolean setRMIService(){
         boolean ok = false;
         System.setProperty("java.security.policy","/Users/miguelcasillas/NetBeansProjects/ProyectoAlpha/src/server/server.policy");
