@@ -59,4 +59,8 @@ public class GameSettings {
         }
         return res;
     }
+    public static int getUserScore(String _user){
+        int num = scores.containsKey(_user) ? scores.get(_user):0;
+        return num;
+    }
 }

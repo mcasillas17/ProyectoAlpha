@@ -26,8 +26,8 @@ public class FirstConnection implements GameConnectionRequest{
     }
     //Method to answer the configuration to the client
     @Override
-    public String getGameIPandPort() throws RemoteException {
-        return broadCastAddress+"_"+broadcastPort+"_"+tcpAddress+"_"+tcpPort;
+    public String getGameIPandPort(String username) throws RemoteException {
+        return broadCastAddress+"_"+broadcastPort+"_"+tcpAddress+"_"+tcpPort+"_"+GameSettings.getUserScore(username);
     }
     
 }

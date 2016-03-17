@@ -35,31 +35,58 @@ public class GameInput extends Thread{
         while(true){
             try {
                 //System.out.println("Estoy recibiendo solicitudes TCP");
-                try (Socket clientSocket = listenSocket.accept()) {
-                    //System.out.println("Conexion aceptada");
-                    ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
-                    ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
-                    Monster m = (Monster)in.readObject();
-                    System.out.println("Monstruo recibido de: "+m.getUser()+" para la ronda "+m.getRound());
-                    int r = GameSettings.getRoundNumber();
-                    int n = GameSettings.getMonsterNumber();
-                    System.out.println("Ronda del juego: "+r+" // no. monstruo del juego: "+n);
-                    boolean w = GameSettings.hasRoundWinner();
-                    Monster res;
-                    if(m.getRound()==(r-1) && m.getNumber()==n && !w){//Is a valid monster
-                        GameSettings.registerPoint(m.getUser());
-                        res = new Monster(-1, -1, "correct");
-                        out.writeObject(res);
-                    }else {
-                        res = new Monster(-1,-1,"wrong");
-                        out.writeObject(res);
-                    }
-                }
+                Socket clientSocket = listenSocket.accept();
+                Connection c = new Connection(clientSocket);
+                c.start();
             } catch (IOException ex) {
-                Logger.getLogger(GameInput.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
                 Logger.getLogger(GameInput.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
+}
+
+class Connection extends Thread {
+	ObjectInputStream in;
+	ObjectOutputStream out;
+	Socket clientSocket;
+	public Connection (Socket aClientSocket) {
+	    try {
+		clientSocket = aClientSocket;
+		out= new ObjectOutputStream(clientSocket.getOutputStream());
+		in = new ObjectInputStream(clientSocket.getInputStream());
+	     } catch(IOException e)  {System.out.println("Connection:"+e.getMessage());}
+	}
+        @Override
+	public void run(){
+            try {
+                //System.out.println("Conexion aceptada");
+                Monster m = (Monster)in.readObject();
+                System.out.println("Monstruo recibido de: "+m.getUser());
+                int r = GameSettings.getRoundNumber();
+                int n = GameSettings.getMonsterNumber();
+                //System.out.println("Ronda del juego: "+r+" // no. monstruo del juego: "+n);
+                boolean w = GameSettings.hasRoundWinner();
+                Monster res;
+                if(m.getRound()==(r-1) && m.getNumber()==n && !w){//Is a valid monster
+                    GameSettings.registerPoint(m.getUser());
+                    res = new Monster(-1, -1, "correct");
+                    out.writeObject(res);
+                }else {
+                    res = new Monster(-1,-1,"wrong");
+                    out.writeObject(res);
+                }
+                try {
+                    clientSocket.close();
+                    //System.out.println("Conexion cerrada");
+                } catch (IOException e){
+                    System.out.println(e);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            }finally {
+                //System.out.println("Conexion cerrada...");
+            }
+        }
 }

@@ -50,6 +50,7 @@ public class ClientInput extends Thread{
                 java.awt.Image.SCALE_SMOOTH)));
         Timer timer = new Timer();
         TimerTask action = new TimerTask() {
+            @Override
             public void run() {
                ImageIcon i2 = new ImageIcon(getClass().getClassLoader().getResource("resources/images/grass.png"));
                         float scale = 6f; // 2 times smaller

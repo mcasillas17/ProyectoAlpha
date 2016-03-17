@@ -13,5 +13,5 @@ import java.rmi.RemoteException;
  * @author miguelcasillas
  */
 public interface GameConnectionRequest extends Remote{
-    public String getGameIPandPort() throws RemoteException;
+    public String getGameIPandPort(String username) throws RemoteException;
 }

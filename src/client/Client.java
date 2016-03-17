@@ -40,7 +40,8 @@ public class Client extends javax.swing.JFrame {
     private Socket clientSocket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
-    private ClientSettings settings;
+    public ClientSettings settings;
+    private int initialScore;
     public Client() {
         initComponents();
         initInterface();
@@ -53,6 +54,22 @@ public class Client extends javax.swing.JFrame {
         }
         jLabel1.setText(jLabel1.getText()+" "+username);
         settings = new ClientSettings(username);
+        settings.setScore(initialScore);
+        input = new ClientInput(broadcastIP, broadcastPort,btns,settings,lblScore);
+        input.start();
+    }
+    public Client(String _broadcastIP, int _broadcastPort, String _tcpIP, int _tcpPort, String _username){
+        initComponents();
+        initInterface();
+        broadcastIP = _broadcastIP;
+        broadcastPort = _broadcastPort;
+        tcpIP = _tcpIP;
+        tcpPort = _tcpPort;
+        username = _username;
+        initialScore = 0;
+        jLabel1.setText(jLabel1.getText()+" "+username);
+        settings = new ClientSettings(username);
+        settings.setScore(initialScore);
         input = new ClientInput(broadcastIP, broadcastPort,btns,settings,lblScore);
         input.start();
     }
@@ -84,10 +101,13 @@ public class Client extends javax.swing.JFrame {
     //Method that sets the IP's and ports from the RMI's answer
     private void setIPsAndPorts(String data){
         String arr[] = data.split("_");
+        for(String a:arr) System.out.println(a);
         broadcastIP = arr[0];
         broadcastPort = Integer.parseInt(arr[1]);
         tcpIP = arr[2];
         tcpPort = Integer.parseInt(arr[3]);
+        initialScore = Integer.parseInt(arr[4]);
+        lblScore.setText("Score: "+initialScore);
     }
     //Method that sets the configuration of the policy
     //and acceses the rmi from the users data
@@ -103,7 +123,7 @@ public class Client extends javax.swing.JFrame {
         try {
             Registry registry = LocateRegistry.getRegistry(ip,port);
             GameConnectionRequest gc = (GameConnectionRequest)registry.lookup(name);
-            String ans = gc.getGameIPandPort();
+            String ans = gc.getGameIPandPort(username);
             setIPsAndPorts(ans);
             return true;
         } catch (RemoteException ex) {
@@ -117,25 +137,27 @@ public class Client extends javax.swing.JFrame {
     //the server, and increases the client score if the server
     //answers with a correct answer
     public void sendMonster(int monsterNumber){
-        try {
-            clientSocket = new Socket(tcpIP,tcpPort);
-            in = new ObjectInputStream(clientSocket.getInputStream());
-            out = new ObjectOutputStream(clientSocket.getOutputStream());
-            int registeredRound = settings.getLastRound();
-            System.out.println("Enviando monstruo de la ronda: "+registeredRound);
-            Monster mons = new Monster(registeredRound, monsterNumber, username);
-            System.out.println(mons.toString());
-            out.writeObject(mons);
-            Monster res = (Monster) in.readObject();
-            if(res.getUser().equals("correct")) {
-                settings.increaseScore();
-                lblScore.setText("Score: "+settings.getScore());
+        if(monsterNumber==settings.getLastMonsterNumber()){
+            try {
+                clientSocket = new Socket(tcpIP,tcpPort);
+                in = new ObjectInputStream(clientSocket.getInputStream());
+                out = new ObjectOutputStream(clientSocket.getOutputStream());
+                int registeredRound = settings.getLastRound();
+                //System.out.println("Enviando monstruo de la ronda: "+registeredRound);
+                Monster mons = new Monster(registeredRound, monsterNumber, username);
+                System.out.println(mons.toString());
+                out.writeObject(mons);
+                Monster res = (Monster) in.readObject();
+                if(res.getUser().equals("correct")) {
+                    settings.increaseScore();
+                    lblScore.setText("Score: "+settings.getScore());
+                }
+                clientSocket.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
-            clientSocket.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /**

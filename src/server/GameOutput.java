@@ -65,7 +65,7 @@ public class GameOutput extends Thread {
                 mulSocket.send(datagram); //Send datagram
                 try {
                     Thread.sleep(2000);//Sleep for two seconds
-                    System.out.println("Scores: \n"+GameSettings.getScores());
+                    //System.out.println("Scores: \n"+GameSettings.getScores());
                 } catch (InterruptedException ex) {
                     Logger.getLogger(GameOutput.class.getName()).log(Level.SEVERE, null, ex);
                 }

@@ -3,45 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package client;
+package ejecutor;
 
 /**
  *
  * @author miguelcasillas
  */
-public class ClientSettings {
-    private int score;
-    private final String username;
+public class AutoSettings {
     private int lastRound;
     private int lastMonsterNumber;
-    //set the settings for a user
-    //this will be an object in the Client class, this means every Client
-    //will have it's settings
-    public ClientSettings(String _username){
-        score = 0;
+    public AutoSettings(){
         lastRound = 0;
-        username = _username;
-    }
-    public int getScore(){
-        return score;
-    }
-    public void setScore(int _score){
-        score = _score;
-    }
-    public void resetScore(){
-        score = 0;
-    }
-    public void increaseScore(){
-        score++;
+        lastMonsterNumber = 0;
     }
     public int getLastRound(){
         return lastRound;
     }
     public void setLastRound(int _lastRound){
         lastRound = _lastRound;
-    }
-    public String getUsername(){
-        return username;
     }
     public int getLastMonsterNumber(){
         return lastMonsterNumber;
