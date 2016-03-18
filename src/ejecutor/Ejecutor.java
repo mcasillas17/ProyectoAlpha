@@ -24,20 +24,28 @@ public class Ejecutor {
         return res;
     }
     public static void imprimeEstadisticas(){
-        for(int i=0;i<tiempos.length;i++)
-            System.out.println("Promedio: "+tiempos[i].getPromedio()+" Desv: "+tiempos[i].getDesv());
+        double prom = 0.0;
+        double desv = 0.0;
+        for(int i=0;i<tiempos.length;i++){
+            prom += tiempos[i].getPromedio();
+            desv += tiempos[i].getDesv();
+        }
+        prom /= tiempos.length;
+        desv /= tiempos.length;
+        System.out.println(+prom+","+desv);
     }
     public static void main(String[] args) {
         //N clientes, cada cliente envía M solicitudes
-        n = 51; m = 300;
-        players = new AutoPlayer[n];
-        tiempos = new ObjetoTiempos[n];
-        vivos = new boolean[n];
-        for(int i=0;i<n;i++) tiempos[i] = new ObjetoTiempos();
-        for(int i=0;i<n;i++) players[i] = new AutoPlayer(m,i,tiempos[i]);
-        for(int i=0;i<n;i++) players[i].start();
-        while(hayClienteVivo());
-        System.out.println("Se acabaron de ejecutar los clientes.");
-        imprimeEstadisticas();
+        n = 50; m = 100;
+        for(int vez=0;vez<10;vez++){
+            players = new AutoPlayer[n];
+            tiempos = new ObjetoTiempos[n];
+            vivos = new boolean[n];
+            for(int i=0;i<n;i++) tiempos[i] = new ObjetoTiempos();
+            for(int i=0;i<n;i++) players[i] = new AutoPlayer(m,i,tiempos[i]);
+            for(int i=0;i<n;i++) players[i].start();
+            while(hayClienteVivo());
+            imprimeEstadisticas();
+        }
     }    
 }

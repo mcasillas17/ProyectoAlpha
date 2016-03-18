@@ -53,6 +53,8 @@ public class AutoPlayerInput extends Thread{
                     doMagicThing(m);
                 }
             }
+            socket.leaveGroup(group);
+            socket.close();
         } catch (UnknownHostException ex) {
             Logger.getLogger(ClientInput.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

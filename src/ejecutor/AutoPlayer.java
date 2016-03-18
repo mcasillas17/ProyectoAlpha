@@ -36,7 +36,7 @@ public class AutoPlayer extends Thread {
     }
     public void sendMonster(int monsterNumber, int query){
         try {
-            Socket clientSocket = new Socket("10.105.200.199",7896);
+            Socket clientSocket = new Socket("localhost",7896);
             ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
             ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
             int registeredRound = settings.getLastRound();

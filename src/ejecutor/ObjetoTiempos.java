@@ -12,6 +12,10 @@ package ejecutor;
 public class ObjetoTiempos {
     private double promedioTiempos;
     private double desvEst;
+    public ObjetoTiempos(){
+        promedioTiempos = 0.0;
+        desvEst = 0.0;
+    }
     public void setPromedio(double _promedio){
         promedioTiempos = _promedio;
     }
